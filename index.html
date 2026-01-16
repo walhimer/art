@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Walhimer - Interactive Digital Installations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Work+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #1a1a1a;
+            --color-accent: #4A90E2;
+            --color-light: #f8f8f8;
+            --color-mid: #666;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--color-primary);
+            background: var(--color-light);
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            page-break-after: always;
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                #4ECDC4 0%, 
+                #4A90E2 25%, 
+                #667EEA 50%, 
+                #95E1D3 75%, 
+                #4ECDC4 100%);
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: 72px;
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            font-family: 'Crimson Text', serif;
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+        }
+
+        h3 {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-mid);
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            max-width: 900px;
+            font-weight: 300;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 80px;
+            font-size: 14px;
+            color: var(--color-mid);
+            font-weight: 300;
+        }
+
+        /* Cover */
+        .cover {
+            justify-content: center;
+            align-items: flex-start;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .cover::before {
+            background: white;
+        }
+
+        .cover h1 {
+            font-size: 96px;
+            margin-bottom: 20px;
+        }
+
+        .cover .subtitle {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 60px;
+            opacity: 0.95;
+        }
+
+        .cover .tagline {
+            font-size: 22px;
+            font-weight: 300;
+            max-width: 750px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            background: white;
+        }
+
+        .section-intro {
+            max-width: 900px;
+            margin-bottom: 50px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 50px;
+            margin-top: 40px;
+            flex: 1;
+        }
+
+        .gallery-grid.three-col {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .gallery-item {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background: #f0f0f0;
+            position: relative;
+        }
+
+        .gallery-image iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+
+        .gallery-content {
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-content h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: none;
+            letter-spacing: 0;
+            color: var(--color-primary);
+        }
+
+        .gallery-meta {
+            font-size: 13px;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .gallery-content p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--color-mid);
+            margin: 0;
+            flex: 1;
+        }
+
+        .view-artwork {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--color-accent);
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .view-artwork:hover {
+            background: #3a7bc8;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: white;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 80px;
+            margin-top: 40px;
+            flex: 1;
+        }
+
+        .contact-main h3 {
+            margin-bottom: 25px;
+            color: var(--color-primary);
+        }
+
+        .contact-main p {
+            font-size: 18px;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .approach-list {
+            margin-top: 30px;
+        }
+
+        .approach-item {
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .approach-item:first-child {
+            padding-top: 0;
+        }
+
+        .approach-item strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .approach-item span {
+            font-size: 16px;
+            color: var(--color-mid);
+            font-weight: 300;
+        }
+
+        .contact-info {
+            background: #f8f8f8;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 30px;
+            color: var(--color-primary);
+        }
+
+        .contact-info p {
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .contact-info a {
+            color: var(--color-primary);
+            text-decoration: none;
+            border-bottom: 2px solid var(--color-accent);
+            transition: opacity 0.3s;
+        }
+
+        .contact-info a:hover {
+            opacity: 0.7;
+        }
+
+        .cta {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--color-mid);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .page {
+                padding: 40px;
+            }
+
+            h1 { font-size: 56px; }
+            .cover h1 { font-size: 72px; }
+
+            .gallery-grid,
+            .gallery-grid.three-col,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .gallery-image {
+                height: 250px;
+            }
+        }
+
+        @media print {
+            .page {
+                page-break-after: always;
+            }
+            .view-artwork {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page 1: Cover -->
+    <div class="page cover">
+        <h1>Mark Walhimer</h1>
+        <div class="subtitle">Interactive Digital Installations</div>
+        <div class="tagline">
+            Creating site-specific artworks that transform architectural spaces through generative algorithms, real-time interaction, and collective participation. From contemplative ambient environments to cooperative civic systems, each installation engages visitors and creates memorable shared experiences.
+        </div>
+    </div>
+
+    <!-- Page 2: Cooperative Interactive Systems -->
+    <div class="page gallery-section">
+        <h2>Cooperative Interactive Systems</h2>
+        <div class="section-intro">
+            <p style="font-size: 20px;">These installations explore collective creativity and civic engagement. Multiple participants must cooperate to unlock the full potential of each piece, creating structures and meanings that emerge only through collaboration.</p>
+        </div>
+
+        <div class="gallery-grid three-col">
+            <div class="gallery-item">
+                <div class="gallery-image">
+                    <iframe src="together_we_build.html"></iframe>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-meta">Civic Operating System · 2026</div>
+                    <h3>Together We Build</h3>
+                    <p>Clicks create points of light. When people interact within a time window, cooperative shapes form—lines for dialogue, triangles for understanding, polygons for community.</p>
+                    <a href="together_we_build.html" target="_blank" class="view-artwork">View Full Installation →</a>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-image">
+                    <iframe src="the_commons.html"></iframe>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-meta">Cultural Platform · 2026</div>
+                    <h3>The Commons</h3>
+                    <p>Every click adds a light to a shared cultural space. Lights drift and connect, creating an evolving network. Museums as civic operating systems.</p>
+                    <a href="the_commons.html" target="_blank" class="view-artwork">View Full Installation →</a>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-image">
+                    <iframe src="collective-architecture.html"></iframe>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-meta">Collective Building · 2026</div>
+                    <h3>Collective Architecture</h3>
+                    <p>Participants contribute building blocks to a shared architectural space. Cooperation creates stable structures while individual actions create dynamic elements.</p>
+                    <a href="collective-architecture.html" target="_blank" class="view-artwork">View Full Installation →</a>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-image">
+                    <iframe src="intersection-commons.html"></iframe>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-meta">Emergent Collaboration · 2026</div>
+                    <h3>Intersection Commons</h3>
+                    <p>Draw freely on a plain canvas. Lines remain neutral until they intersect. At crossing points, vibrant nodes emerge and drift.</p>
+                    <a href="intersection-commons.html" target="_blank" class="view-artwork">View Full Installation →</a>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-image">
+                    <iframe src="weaving-commons.html"></iframe>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-meta">Collective Weaving · 2026</div>
+                    <h3>The Weaving Commons</h3>
+                    <p>Participants drag threads from edges toward the center. When paths intersect, colorful nodes mark cooperation points.</p>
+                    <a href="weaving-commons.html" target="_blank" class="view-artwork">View Full Installation →</a>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-image">
+                    <iframe src="shelves.html"></iframe>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-meta">Parametric Architecture · 2026</div>
+                    <h3>Shelves</h3>
+                    <p>Interactive 3D environment exploring spatial relationships and curation. Real-time controls allow visitors to reshape the installation.</p>
+                    <a href="shelves.html" target="_blank" class="view-artwork">View Full Installation →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-number">02</div>
+    </div>
+
+    <!-- Page 3: Contemplative & Technical Details -->
+    <div class="page gallery-section">
+        <h2>Contemplative Installations & Specifications</h2>
+        <div class="section-intro">
+            <p style="font-size: 20px;">Generative artworks exploring natural phenomena and color theory, alongside flexible technical specifications for various deployment scenarios.</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <div class="gallery-image">
+                    <iframe src="fluid-dynamics.html"></iframe>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-meta">Contemplative System · 2026</div>
+                    <h3>Fluid Dynamics</h3>
+                    <p>Flowing curves generated through Perlin noise create mesmerizing organic patterns. Represents the natural flow of communities and ideas through cultural spaces. Perfect for ambient, meditative environments.</p>
+                    <a href="fluid-dynamics.html" target="_blank" class="view-artwork">View Full Installation →</a>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-content" style="padding: 40px;">
+                    <h3 style="font-family: 'Crimson Text', serif; font-size: 24px; text-transform: none; letter-spacing: 0; color: var(--color-primary); margin-bottom: 20px;">Display Options</h3>
+                    <div style="color: var(--color-mid); line-height: 1.8;">
+                        <p style="margin-bottom: 15px;"><strong style="color: var(--color-primary);">Single Screen:</strong> Touch displays, kiosks, wall-mounted monitors</p>
+                        <p style="margin-bottom: 15px;"><strong style="color: var(--color-primary);">Projection:</strong> Short-throw, ultra-short-throw, or standard projectors</p>
+                        <p style="margin-bottom: 15px;"><strong style="color: var(--color-primary);">Multi-Display:</strong> Video walls, coordinated arrays</p>
+                        <p><strong style="color: var(--color-primary);">LED:</strong> Large-format LED walls for public spaces</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-content" style="padding: 40px;">
+                    <h3 style="font-family: 'Crimson Text', serif; font-size: 24px; text-transform: none; letter-spacing: 0; color: var(--color-primary); margin-bottom: 20px;">Interaction Methods</h3>
+                    <div style="color: var(--color-mid); line-height: 1.8;">
+                        <p style="margin-bottom: 15px;"><strong style="color: var(--color-primary);">Touch:</strong> Capacitive touchscreens for direct manipulation</p>
+                        <p style="margin-bottom: 15px;"><strong style="color: var(--color-primary);">Gesture:</strong> Depth sensors for touchless interaction</p>
+                        <p style="margin-bottom: 15px;"><strong style="color: var(--color-primary);">Mobile:</strong> Smartphone/tablet integration</p>
+                        <p><strong style="color: var(--color-primary);">Autonomous:</strong> Self-running ambient installations</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-content" style="padding: 40px;">
+                    <h3 style="font-family: 'Crimson Text', serif; font-size: 24px; text-transform: none; letter-spacing: 0; color: var(--color-primary); margin-bottom: 20px;">Customization</h3>
+                    <div style="color: var(--color-mid); line-height: 1.8;">
+                        <p style="margin-bottom: 15px;"><strong style="color: var(--color-primary);">Colors:</strong> Brand-specific palettes optimized for therapeutic or aesthetic effects</p>
+                        <p style="margin-bottom: 15px;"><strong style="color: var(--color-primary);">Behavior:</strong> Timing, speed, complexity adjusted to audience and context</p>
+                        <p style="margin-bottom: 15px;"><strong style="color: var(--color-primary);">Scale:</strong> Adapted to architectural features and viewing distances</p>
+                        <p><strong style="color: var(--color-primary);">Content:</strong> Custom algorithms and visual systems developed per commission</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-number">03</div>
+    </div>
+
+    <!-- Page 4: Contact & Approach -->
+    <div class="page contact">
+        <h2>Collaboration & Contact</h2>
+
+        <div class="contact-grid">
+            <div class="contact-main">
+                <h3>Working Together</h3>
+                <p>I collaborate with architects, designers, art consultants, and institutional clients to create site-specific installations that transform spaces and engage communities.</p>
+
+                <div class="approach-list">
+                    <div class="approach-item">
+                        <strong>Consultation & Concept</strong>
+                        <span>Understanding your space, audience, and goals. Site visits to assess lighting, architecture, and viewer flow. Custom demonstrations tailored to your environment.</span>
+                    </div>
+
+                    <div class="approach-item">
+                        <strong>Technical Implementation</strong>
+                        <span>Hardware specification (displays, projectors, computers, mounting). Custom software development and performance optimization. Complete turnkey service from concept to completion.</span>
+                    </div>
+
+                    <div class="approach-item">
+                        <strong>Installation & Support</strong>
+                        <span>On-site installation management, calibration, and testing. Remote monitoring and software updates. Ongoing maintenance and technical support.</span>
+                    </div>
+                </div>
+
+                <p style="margin-top: 40px; font-size: 16px; color: var(--color-mid);">
+                    <strong>Ideal for:</strong> Museums · Cultural Institutions · Healthcare Facilities · Corporate Lobbies · Universities · Public Art · Festivals · Hospitality
+                </p>
+
+                <p style="margin-top: 30px; font-size: 16px; color: var(--color-mid);">
+                    <strong>Philosophy:</strong> A museum is no longer just a building—it is a civic operating system. These installations explore how individual contributions build collective understanding, how technology fosters community, and how cultural spaces serve as platforms for shared experience.
+                </p>
+            </div>
+
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                <p><strong>Mark Walhimer</strong></p>
+                <p>Interactive Installation Artist</p>
+                <p style="margin-top: 30px;">
+                    <a href="mailto:contact@markwalhimer.com">contact@markwalhimer.com</a>
+                </p>
+                <p>
+                    <a href="https://museumplanning.github.io/interactive-installations/">View Portfolio Online</a>
+                </p>
+
+                <div class="cta">
+                    Available for commissions, consultations, and artist talks. Let's discuss how interactive installations can transform your space.
+                </div>
+            </div>
+        </div>
+
+        <div class="page-number">04</div>
+    </div>
+
+</body>
+</html>
