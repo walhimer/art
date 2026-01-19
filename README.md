@@ -12,5 +12,5 @@
 - https://walhimer.github.io/art/weaving-commons.html
 - https://walhimer.github.io/art/lights2.html
 - 
-- https://walhimer.github.io/art/fluid-dynamics.html
+- https://walhimer.github.io/art/fluid-lines.html
 - https://walhimer.github.io/art/lights2.html
