@@ -3,6 +3,7 @@
 # Interactive Artworks
 - https://walhimer.github.io/art/living-commons.html
 - https://walhimer.github.io/art/fluid-dynamics.html
+- https://walhimer.github.io/art/gradient-boxes.html
 - https://walhimer.github.io/art/collective-architecture.html
 - https://walhimer.github.io/art/emergent_geometry.html
 - https://walhimer.github.io/art/intersection-commons.html
