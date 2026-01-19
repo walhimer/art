@@ -2,8 +2,6 @@
 - https://walhimer.github.io/art/
 # Interactive Artworks
 - https://walhimer.github.io/art/collective-architecture.html
-- https://walhimer.github.io/art/fluid-dynamics.html
-- https://walhimer.github.io/art/index.html
 - https://walhimer.github.io/art/intersection-commons.html
 - https://walhimer.github.io/art/lights2.html
 - https://walhimer.github.io/art/shelves.html
@@ -11,3 +9,5 @@
 - https://walhimer.github.io/art/together_we_build.html
 - https://walhimer.github.io/art/weaving-commons.html
 - https://walhimer.github.io/art/lights2.html
+- 
+- https://walhimer.github.io/art/fluid-dynamics.html
