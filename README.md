@@ -10,7 +10,6 @@
 - https://walhimer.github.io/art/the_commons.html
 - https://walhimer.github.io/art/together_we_build.html
 - https://walhimer.github.io/art/weaving-commons.html
-- https://walhimer.github.io/art/lights2.html
 - 
 - https://walhimer.github.io/art/fluid-lines.html
 - https://walhimer.github.io/art/lights2.html
