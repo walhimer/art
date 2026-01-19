@@ -1,7 +1,3 @@
 # art
-Mark Walhimer Artwork
-https://walhimer.github.io/art/
-# installation-composer
-
-## Files
-- index.html
+- (https://walhimer.github.io/art/)
+- (https://walhimer.github.io/art/lights2.html)
