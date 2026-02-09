@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergent DNA - Machine Species (Seed 1)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.2/p5.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #ffffff; /* White background per your P5 code */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      /* EXHIBITION SPECS: Vertical 9:16 format */
+      width: 2160px;
+      height: 3840px;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    /* Elegant Gallery UI */
+    #ui-layer {
+      position: absolute;
+      top: 80px;
+      right: 80px;
+      width: 450px;
+      background: rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 50px;
+      border-radius: 4px;
+      color: #000;
+      z-index: 1000;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 8px;
+      margin-bottom: 40px;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .control-group {
+      margin-bottom: 35px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      color: rgba(0, 0, 0, 0.5);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      appearance: none;
+      background: rgba(0, 0, 0, 0.1);
+      height: 2px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      background: #000;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #start-trigger {
+      width: 100%;
+      padding: 25px;
+      background: #000;
+      color: #fff;
+      border: none;
+      font-size: 16px;
+      letter-spacing: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 40px;
+      transition: all 0.3s ease;
+    }
+
+    #start-trigger:hover {
+      background: #333;
+    }
+
+    .metadata {
+      position: absolute;
+      bottom: 80px;
+      left: 80px;
+      color: #000;
+      font-size: 18px;
+      letter-spacing: 2px;
+      opacity: 0.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="ui-layer">
+    <h1>Machine Species</h1>
+    <button id="start-trigger">INITIATE GROWTH</button>
+    
+    <div class="control-group">
+      <label>Ontogeny (Growth)</label>
+      <input type="range" id="growth" min="0" max="100" value="0">
+    </div>
+
+    <div class="control-group">
+      <label>Complexity (Scale)</label>
+      <input type="range" id="boxSize" min="0.5" max="2.0" step="0.1" value="1.0">
+    </div>
+
+    <div class="control-group">
+      <label>Kinematics (Speed)</label>
+      <input type="range" id="rotSpeed" min="0.1" max="2.0" step="0.1" value="0.5">
+    </div>
+  </div>
+
+  <div class="metadata">
+    EMERGENT DNA // SEED_01<br>
+    PHENO: KINETIC_MACHINE // PALETTE: MAGENTA_ATMOSPHERE
+  </div>
+
+  <script>
+    let dna = { machines: [], particles: [] };
+    let hasStarted = false;
+    let time = 0;
+
+    // Universal Parameters
+    const params = {
+      growth: 0,
+      boxSize: 1.0,
+      rotSpeed: 0.5
+    };
+
+    function setup() {
+      createCanvas(2160, 3840, WEBGL);
+      colorMode(HSB, 360, 100, 100, 255);
+      
+      // Layer 1: Identity Generation (Deterministic)
+      generateDNA(919); 
+      
+      document.getElementById('start-trigger').onclick = () => hasStarted = true;
+      document.getElementById('growth').oninput = (e) => params.growth = e.target.value / 100;
+      document.getElementById('boxSize').oninput = (e) => params.boxSize = e.target.value;
+      document.getElementById('rotSpeed').oninput = (e) => params.rotSpeed = e.target.value;
+      
+      pixelDensity(1); 
+    }
+
+    function generateDNA(seedValue) {
+      randomSeed(seedValue);
+      
+      // Generate Machines
+      for (let i = 0; i < 6; i++) {
+        let machine = {
+          x: random(-600, 600),
+          y: random(-800, 800),
+          z: random(-400, 400),
+          rotX: random(TWO_PI),
+          rotY: random(TWO_PI),
+          rotZ: random(TWO_PI),
+          rotSpeedX: random(0.01, 0.03),
+          rotSpeedY: random(0.01, 0.03),
+          rotSpeedZ: random(0.01, 0.03),
+          baseScale: random(0.8, 1.8),
+          hue: random(300, 360), // Your Magenta/Red range
+          components: []
+        };
+
+        for (let j = 0; j < 10; j++) {
+          machine.components.push({
+            type: floor(random(4)), 
+            x: random(-120, 120),
+            y: random(-120, 120),
+            z: random(-120, 120),
+            size: random(30, 80),
+            rotSpeed: random(0.02, 0.08),
+            phase: random(TWO_PI)
+          });
+        }
+        dna.machines.push(machine);
+      }
+
+      // Generate Particles
+      for (let i = 0; i < 300; i++) {
+        dna.particles.push({
+          x: random(-1000, 1000),
+          y: random(-1500, 1500),
+          z: random(-800, 800),
+          vx: random(-1, 1),
+          vy: random(-1, 1),
+          vz: random(-1, 1),
+          life: random(100, 255),
+          size: random(4, 12),
+          hue: random(280, 360) // Your Purple/Magenta range
+        });
+      }
+    }
+
+    function draw() {
+      background(255); // White background per your code
+
+      if (!hasStarted) {
+        drawAwaitingState();
+        return;
+      }
+
+      // Camera movement
+      let camX = cos(time * 0.001) * 1200;
+      let camY = sin(time * 0.0008) * 800;
+      let camZ = sin(time * 0.0012) * 1000 + 800;
+      camera(camX, camY, camZ, 0, 0, 0, 0, 1, 0);
+
+      // Atmospheric lighting from your code
+      ambientLight(280, 40, 30);
+      directionalLight(320, 60, 80, -1, 0.5, -1);
+      pointLight(340, 80, 90, 400, -400, 600);
+
+      // Layer 3: The Renderer
+      drawBackgroundVolumes();
+
+      let visibleMachines = floor(params.growth * dna.machines.length);
+      for (let i = 0; i < visibleMachines; i++) {
+        drawMachine(dna.machines[i]);
+      }
+
+      drawParticles();
+
+      time += params.rotSpeed;
+    }
+
+    function drawBackgroundVolumes() {
+      push();
+      noFill();
+      for (let i = 0; i < 5; i++) {
+        push();
+        let x = cos(time * 0.003 + i * 2) * 600;
+        let y = sin(time * 0.002 + i * 1.5) * 400;
+        let z = sin(time * 0.004 + i) * 800;
+        translate(x, y, z);
+        rotateX(time * 0.002 + i);
+        rotateY(time * 0.003 + i * 0.7);
+
+        for (let j = 0; j < 10; j++) {
+          let alpha = map(j, 0, 9, 60, 5);
+          let size = 200 + j * 50;
+          let hue = (time * 0.5 + i * 60 + j * 10) % 360;
+          stroke(hue, 80, 90, alpha);
+          strokeWeight(2);
+          if (i % 2 === 0) sphere(size);
+          else torus(size, size * 0.3);
+        }
+        pop();
+      }
+      pop();
+    }
+
+    function drawMachine(m) {
+      push();
+      translate(m.x, m.y, m.z);
+      scale(m.baseScale * params.boxSize);
+
+      let rX = m.rotX + (time * m.rotSpeedX);
+      let rY = m.rotY + (time * m.rotSpeedY);
+      let rZ = m.rotZ + (time * m.rotSpeedZ);
+      rotateX(rX); rotateY(rY); rotateZ(rZ);
+
+      // Core
+      for (let i = 0; i < 6; i++) {
+        let alpha = map(i, 0, 5, 150, 20);
+        let coreHue = (m.hue + time * 0.2) % 360;
+        fill(coreHue, 70, 90, alpha);
+        noStroke();
+        push();
+        scale(1 + i * 0.2);
+        box(100);
+        pop();
+      }
+
+      // Components
+      for (let comp of m.components) {
+        push();
+        translate(comp.x, comp.y, comp.z);
+        let r = time * comp.rotSpeed + comp.phase;
+        rotateX(r); rotateY(r * 0.7); rotateZ(r * 1.3);
+
+        for (let i = 0; i < 3; i++) {
+          let alpha = map(i, 0, 2, 120, 40);
+          let compHue = (m.hue + 60 + time * 0.3 + comp.phase * 10) % 360;
+          fill(compHue, 60, 80, alpha);
+          noStroke();
+          let size = comp.size + i * 10;
+          if (comp.type === 0) { rotateX(HALF_PI); cylinder(size * 0.6, size); }
+          else if (comp.type === 1) box(size);
+          else if (comp.type === 2) torus(size, size * 0.3);
+          else sphere(size * 0.7);
+        }
+        pop();
+      }
+      pop();
+    }
+
+    function drawParticles() {
+      let visibleParticles = floor(params.growth * dna.particles.length);
+      for (let i = 0; i < visibleParticles; i++) {
+        let p = dna.particles[i];
+        push();
+        translate(p.x, p.y, p.z);
+        fill(p.hue, 60, 90, p.life);
+        noStroke();
+        sphere(p.size);
+        pop();
+
+        p.x += p.vx; p.y += p.vy; p.z += p.vz;
+        if (p.x > 1000 || p.x < -1000) p.vx *= -1;
+        if (p.y > 1500 || p.y < -1500) p.vy *= -1;
+      }
+    }
+
+    function drawAwaitingState() {
+      let pulse = (sin(millis() * 0.002) + 1) * 0.5;
+      camera(0, 0, 1000, 0, 0, 0, 0, 1, 0);
+      noFill();
+      stroke(330, 80, 90, 50 + pulse * 50);
+      strokeWeight(2);
+      rotateY(millis() * 0.001);
+      box(300 + pulse * 50);
+      
+      push();
+      fill(0, 40);
+      textAlign(CENTER);
+      textSize(32);
+      text("AWAITING KINETIC AUTHORIZATION", 0, 600);
+      pop();
+    }
+  </script>
+</body>
+</html>
