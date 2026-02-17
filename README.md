@@ -1,6 +1,7 @@
 # Mark Walhimer Interactive Installation Artwork
 - https://walhimer.github.io/art/
 # Interactive Artworks
+- https://walhimer.github.io/art/bloom.html
 - https://walhimer.github.io/art/923_centered.html
 - https://walhimer.github.io/art/920_emergentDNA.html
 - http://walhimer.github.io/art/technical-drawing.html
