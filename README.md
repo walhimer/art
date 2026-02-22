@@ -14,7 +14,7 @@
 - https://walhimer.github.io/art/gradient-boxes.html
 - http://walhimer.github.io/art/string-art-1.html
 - https://walhimer.github.io/art/collective-architecture.html
-- https://walhimer.github.io/art/museumplanning_animation.html
+- https://walhimer.github.io/art/museumplanning_animation.html - 150/ second delay between white background and animation 
 - https://walhimer.github.io/art/emergent_geometry.html
 - https://walhimer.github.io/art/intersection-commons.html
 - https://walhimer.github.io/art/shelves.html
