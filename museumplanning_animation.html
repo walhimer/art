@@ -20,9 +20,21 @@
       width: 100%; height: 100%;
     }
     #spacer {
-      width: 100%;
+      width: 500vw;
       height: 500vh;
       background: #ffffff;
+    }
+    .credit {
+      position: fixed;
+      bottom: 24px;
+      right: 32px;
+      font-family: Georgia, serif;
+      font-size: 12px;
+      font-style: italic;
+      color: rgba(200, 185, 154, 0.6);
+      letter-spacing: 0.1em;
+      pointer-events: none;
+      z-index: 10;
     }
   </style>
 </head>
@@ -31,87 +43,90 @@
     <div id="p5-canvas"></div>
   </div>
   <div id="spacer"></div>
+  <div class="credit">Mark Walhimer 2026</div>
   <script>
-    new p5(function(p) {
-      let lines = [];
-      let particles = [];
-      let W, H;
+    setTimeout(function() {
+      new p5(function(p) {
+        let lines = [];
+        let particles = [];
+        let W, H;
 
-      p.setup = function() {
-        let canvas = p.createCanvas(p.windowWidth, p.windowHeight);
-        canvas.parent('p5-canvas');
-        p.colorMode(p.HSB, 360, 100, 100, 100);
-        W = p.width;
-        H = p.height;
-        for (let i = 0; i < 18; i++) {
-          lines.push({
-            x1: p.random(W * 0.1, W * 0.9),
-            y1: p.random(H * 0.1, H * 0.9),
-            x2: p.random(W * 0.1, W * 0.9),
-            y2: p.random(H * 0.1, H * 0.9),
-            alpha: p.random(8, 22),
-            speed: p.random(0.0003, 0.001),
-            offset: p.random(1000),
-            weight: p.random(0.3, 1.2)
-          });
-        }
-        for (let i = 0; i < 60; i++) {
-          particles.push({
-            x: p.random(W),
-            y: p.random(H),
-            size: p.random(1, 3),
-            alpha: p.random(5, 25),
-            speed: p.random(0.05, 0.3),
-            angle: p.random(p.TWO_PI)
-          });
-        }
-      };
-
-      p.draw = function() {
-        p.background(22, 8, 5, 8);
-        let t = p.frameCount * 0.005;
-        p.noFill();
-        for (let l of lines) {
-          let wave = p.sin(t * l.speed * 1000 + l.offset) * 0.5 + 0.5;
-          let x1 = l.x1 + p.sin(t + l.offset) * 30;
-          let y1 = l.y1 + p.cos(t * 0.7 + l.offset) * 20;
-          let x2 = l.x2 + p.cos(t * 0.8 + l.offset + 1) * 30;
-          let y2 = l.y2 + p.sin(t * 0.6 + l.offset + 2) * 20;
-          p.stroke(36, 25, 80, l.alpha * wave);
-          p.strokeWeight(l.weight);
-          p.line(x1, y1, x2, y2);
-          if (l.offset > 500) {
-            p.stroke(36, 20, 70, l.alpha * 0.4);
-            p.strokeWeight(l.weight * 0.5);
-            p.line(x1, y2, x2, y1);
+        p.setup = function() {
+          let canvas = p.createCanvas(p.windowWidth, p.windowHeight);
+          canvas.parent('p5-canvas');
+          p.colorMode(p.HSB, 360, 100, 100, 100);
+          W = p.width;
+          H = p.height;
+          for (let i = 0; i < 18; i++) {
+            lines.push({
+              x1: p.random(W * 0.1, W * 0.9),
+              y1: p.random(H * 0.1, H * 0.9),
+              x2: p.random(W * 0.1, W * 0.9),
+              y2: p.random(H * 0.1, H * 0.9),
+              alpha: p.random(8, 22),
+              speed: p.random(0.0003, 0.001),
+              offset: p.random(1000),
+              weight: p.random(0.3, 1.2)
+            });
           }
-        }
-        p.noStroke();
-        for (let pt of particles) {
-          pt.x += p.cos(pt.angle) * pt.speed;
-          pt.y += p.sin(pt.angle) * pt.speed;
-          pt.angle += p.random(-0.02, 0.02);
-          if (pt.x < 0) pt.x = W;
-          if (pt.x > W) pt.x = 0;
-          if (pt.y < 0) pt.y = H;
-          if (pt.y > H) pt.y = 0;
-          p.fill(36, 30, 90, pt.alpha);
-          p.ellipse(pt.x, pt.y, pt.size);
-        }
-        let vignette = p.drawingContext;
-        let grad = vignette.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.9);
-        grad.addColorStop(0, 'rgba(0,0,0,0)');
-        grad.addColorStop(1, 'rgba(0,0,0,0.7)');
-        vignette.fillStyle = grad;
-        vignette.fillRect(0, 0, W, H);
-      };
+          for (let i = 0; i < 60; i++) {
+            particles.push({
+              x: p.random(W),
+              y: p.random(H),
+              size: p.random(1, 3),
+              alpha: p.random(5, 25),
+              speed: p.random(0.05, 0.3),
+              angle: p.random(p.TWO_PI)
+            });
+          }
+        };
 
-      p.windowResized = function() {
-        p.resizeCanvas(p.windowWidth, p.windowHeight);
-        W = p.width;
-        H = p.height;
-      };
-    });
+        p.draw = function() {
+          p.background(22, 8, 5, 8);
+          let t = p.frameCount * 0.005;
+          p.noFill();
+          for (let l of lines) {
+            let wave = p.sin(t * l.speed * 1000 + l.offset) * 0.5 + 0.5;
+            let x1 = l.x1 + p.sin(t + l.offset) * 30;
+            let y1 = l.y1 + p.cos(t * 0.7 + l.offset) * 20;
+            let x2 = l.x2 + p.cos(t * 0.8 + l.offset + 1) * 30;
+            let y2 = l.y2 + p.sin(t * 0.6 + l.offset + 2) * 20;
+            p.stroke(36, 25, 80, l.alpha * wave);
+            p.strokeWeight(l.weight);
+            p.line(x1, y1, x2, y2);
+            if (l.offset > 500) {
+              p.stroke(36, 20, 70, l.alpha * 0.4);
+              p.strokeWeight(l.weight * 0.5);
+              p.line(x1, y2, x2, y1);
+            }
+          }
+          p.noStroke();
+          for (let pt of particles) {
+            pt.x += p.cos(pt.angle) * pt.speed;
+            pt.y += p.sin(pt.angle) * pt.speed;
+            pt.angle += p.random(-0.02, 0.02);
+            if (pt.x < 0) pt.x = W;
+            if (pt.x > W) pt.x = 0;
+            if (pt.y < 0) pt.y = H;
+            if (pt.y > H) pt.y = 0;
+            p.fill(36, 30, 90, pt.alpha);
+            p.ellipse(pt.x, pt.y, pt.size);
+          }
+          let vignette = p.drawingContext;
+          let grad = vignette.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.9);
+          grad.addColorStop(0, 'rgba(0,0,0,0)');
+          grad.addColorStop(1, 'rgba(0,0,0,0.7)');
+          vignette.fillStyle = grad;
+          vignette.fillRect(0, 0, W, H);
+        };
+
+        p.windowResized = function() {
+          p.resizeCanvas(p.windowWidth, p.windowHeight);
+          W = p.width;
+          H = p.height;
+        };
+      });
+    }, 150);
   </script>
 </body>
 </html>
