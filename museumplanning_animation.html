@@ -8,38 +8,24 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0a0a0a; overflow: hidden; }
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
     #p5-canvas {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
     }
-    #flash {
-      position: fixed;
-      inset: 0;
-      background: white;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.05s ease-in;
-    }
-    #flash.active {
-      opacity: 0.35;
-      transition: none;
-    }
   </style>
 </head>
 <body>
-  <div id="p5-canvas"></div>
-  <div id="flash"></div>
+  <div id="hero">
+    <div id="p5-canvas"></div>
+  </div>
   <script>
-    // Flash on click
-    const flash = document.getElementById('flash');
-    document.addEventListener('mousedown', () => {
-      flash.classList.add('active');
-      setTimeout(() => {
-        flash.classList.remove('active');
-      }, 50);
-    });
-
     // P5.JS HERO SKETCH
     // Floating architectural lines that suggest museum space and structure
     new p5(function(p) {
